@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"projects/golang-crud/article/delivery/handler"
 	"projects/golang-crud/repo"
 )
 
@@ -15,12 +16,7 @@ func main() {
 		return
 	}
 
-	http.HandleFunc("/pessoa", NewPessoaHTTPHandler)
+	http.HandleFunc("/pessoa", handler.NewPessoaHTTPHandler)
 
 	http.ListenAndServe(":9000", nil)
-}
-
-//NewPessoaHTTPHandler redireciona o request do endpoint /pessoa
-func NewPessoaHTTPHandler(w http.ResponseWriter, r *http.Request) {
-
 }

@@ -1,11 +1,11 @@
-package httphandler
+package handler
 
 import (
 	"encoding/json"
 	"fmt"
-	"go-clean-arch/article/delivery/http"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"projects/golang-crud/model"
 	"projects/golang-crud/repo"
 	"strconv"
