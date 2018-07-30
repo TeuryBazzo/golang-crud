@@ -6,9 +6,10 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"projects/golang-crud/model"
-	"projects/golang-crud/repo"
 	"strconv"
+
+	"github.com/golang-crud/model"
+	"github.com/golang-crud/repo"
 )
 
 //NewPessoaHTTPHandler redireciona o request do endpoint /pessoa

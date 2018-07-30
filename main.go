@@ -3,8 +3,9 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"projects/golang-crud/article/delivery/handler"
-	"projects/golang-crud/repo"
+
+	"github.com/golang-crud/article/delivery/handler"
+	"github.com/golang-crud/repo"
 )
 
 func main() {
