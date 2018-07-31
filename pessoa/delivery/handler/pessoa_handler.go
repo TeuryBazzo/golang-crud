@@ -9,6 +9,7 @@ import (
 	"strconv"
 
 	"github.com/golang-crud/model"
+	"github.com/golang-crud/pessoa/delivery/repository"
 	"github.com/golang-crud/repo"
 )
 
@@ -31,9 +32,11 @@ func NewPessoaHTTPHandler(w http.ResponseWriter, r *http.Request) {
 // ObterPessoas funcao que obtem pessoas
 func ObterPessoas(w http.ResponseWriter, r *http.Request) {
 
-	pessoa := model.Pessoa{}
+	pessoaRepository := repository.PessoaRepository{}
 
-	rows, err := repo.Db.Queryx("select * from Pessoa")
+	pessoaRepository.Db = repo.Db
+
+	pessoas, err := pessoaRepository.ObterTodos()
 
 	if err != nil {
 		http.Error(w, "Não encontramos nemhum item", http.StatusInternalServerError)
@@ -41,16 +44,7 @@ func ObterPessoas(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	for rows.Next() {
-		err = rows.StructScan(&pessoa)
-		if err != nil {
-			http.Error(w, "Não encontramos nemhum item", http.StatusInternalServerError)
-			fmt.Println("[main] [select pessoa] ", err.Error())
-			return
-		}
-	}
-
-	fmt.Fprint(w, pessoa)
+	fmt.Fprint(w, pessoas)
 	return
 }
 
