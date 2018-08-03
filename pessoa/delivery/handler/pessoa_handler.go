@@ -68,11 +68,11 @@ func CriarPessoa(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	query := fmt.Sprintf("INSERT INTO pessoa (id,name,age,telephone) VALUES (%d,'%s',%d,'%s')", pessoa.Id, pessoa.Nome, pessoa.Idade, pessoa.Telefone)
+	pessoaRepository := repository.PessoaRepository{}
 
-	fmt.Println(query)
+	pessoaRepository.Db = repo.Db
 
-	_, err = repo.Db.Queryx(query)
+	err = pessoaRepository.Incluir(pessoa)
 
 	if err != nil {
 		http.Error(w, "Error ao inserir registro "+err.Error(), http.StatusBadRequest)
@@ -104,9 +104,9 @@ func AlterarPessoa(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	query := fmt.Sprintf("UPDATE pessoa SET name = '%s', age = %d, telephone = '%s' WHERE id = %d", pessoa.Nome, pessoa.Idade, pessoa.Telefone, pessoa.Id)
-
-	_, err = repo.Db.Queryx(query)
+	pessoaRepository := repository.PessoaRepository{}
+	pessoaRepository.Db = repo.Db
+	err = pessoaRepository.Alterar(pessoa)
 
 	if err != nil {
 		http.Error(w, "Erro ao alterar pessoa", http.StatusBadRequest)
@@ -131,9 +131,10 @@ func DeletarPessoa(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	query := fmt.Sprintf("DELETE FROM pessoa WHERE id = %d", ID)
+	pessoaRepository := repository.PessoaRepository{}
+	pessoaRepository.Db = repo.Db
 
-	_, err = repo.Db.Queryx(query)
+	err = pessoaRepository.Deletar(ID)
 
 	if err != nil {
 		http.Error(w, "Não foi possivel deletar o registro", http.StatusBadRequest)

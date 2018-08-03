@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/golang-crud/article/delivery/handler"
+	"github.com/golang-crud/pessoa/delivery/handler"
 	"github.com/golang-crud/repo"
 )
 
