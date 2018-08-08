@@ -43,7 +43,7 @@ func (rep *PessoaRepository) ObterTodos() (pessoas []model.Pessoa, err error) {
 //Incluir inclui uma pessoa no banco de dados
 func (rep *PessoaRepository) Incluir(pessoa model.Pessoa) (err error) {
 
-	query := fmt.Sprintf("INSERT INTO pessoa (id,name,age,telephone) VALUES (%d,'%s',%d,'%s')", pessoa.Id, pessoa.Nome, pessoa.Idade, pessoa.Telefone)
+	query := fmt.Sprintf("INSERT INTO pessoa (id,name,age,telephone) VALUES ('%s','%s',%d,'%s')", pessoa.ID, pessoa.Nome, pessoa.Idade, pessoa.Telefone)
 
 	_, err = rep.Db.Exec(query)
 
@@ -57,7 +57,7 @@ func (rep *PessoaRepository) Incluir(pessoa model.Pessoa) (err error) {
 //Alterar altera um registro de pessoa
 func (rep *PessoaRepository) Alterar(pessoa model.Pessoa) (err error) {
 
-	query := fmt.Sprintf("UPDATE pessoa SET name = '%s', age = %d, telephone = '%s' WHERE id = %d", pessoa.Nome, pessoa.Idade, pessoa.Telefone, pessoa.Id)
+	query := fmt.Sprintf("UPDATE pessoa SET name = '%s', age = %d, telephone = '%s' WHERE id = '%s'", pessoa.Nome, pessoa.Idade, pessoa.Telefone, pessoa.ID)
 
 	_, err = rep.Db.Exec(query)
 
@@ -69,8 +69,8 @@ func (rep *PessoaRepository) Alterar(pessoa model.Pessoa) (err error) {
 }
 
 //Deletar deleta um registro de pessoa
-func (rep *PessoaRepository) Deletar(ID int64) (err error) {
-	query := fmt.Sprintf("DELETE FROM pessoa WHERE id = %d", ID)
+func (rep *PessoaRepository) Deletar(ID string) (err error) {
+	query := fmt.Sprintf("DELETE FROM pessoa WHERE id = '%s'", ID)
 
 	_, err = rep.Db.Exec(query)
 
