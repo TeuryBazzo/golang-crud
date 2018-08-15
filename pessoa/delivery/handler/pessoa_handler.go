@@ -6,10 +6,10 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/golang-crud/model"
 	"github.com/golang-crud/pessoa/delivery/repository"
+	"github.com/golang-crud/pessoa/delivery/service"
 	"github.com/golang-crud/repo"
 )
 
@@ -32,11 +32,9 @@ func NewPessoaHTTPHandler(w http.ResponseWriter, r *http.Request) {
 // ObterPessoas funcao que obtem pessoas
 func ObterPessoas(w http.ResponseWriter, r *http.Request) {
 
-	pessoaRepository := repository.PessoaRepository{}
+	pessoaService := service.PessoaService{}
 
-	pessoaRepository.Db = repo.Db
-
-	pessoas, err := pessoaRepository.ObterTodos()
+	pessoas, err := pessoaService.ObterPessoas()
 
 	if err != nil {
 		http.Error(w, "Não encontramos nemhum item", http.StatusInternalServerError)
@@ -44,7 +42,11 @@ func ObterPessoas(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprint(w, pessoas)
+	json, _ := json.Marshal(pessoas)
+	s := string(json[:])
+
+	fmt.Fprint(w, s)
+
 	return
 }
 
@@ -124,17 +126,10 @@ func DeletarPessoa(w http.ResponseWriter, r *http.Request) {
 
 	pessoaID := queryString["id"][0]
 
-	ID, err := strconv.ParseInt(pessoaID, 10, 64)
-
-	if err != nil {
-		http.Error(w, "Pessoa id não é valido", http.StatusBadRequest)
-		return
-	}
-
 	pessoaRepository := repository.PessoaRepository{}
 	pessoaRepository.Db = repo.Db
 
-	err = pessoaRepository.Deletar(ID)
+	err := pessoaRepository.Deletar(pessoaID)
 
 	if err != nil {
 		http.Error(w, "Não foi possivel deletar o registro", http.StatusBadRequest)

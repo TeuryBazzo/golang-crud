@@ -21,7 +21,7 @@ CREATE TABLE public.pessoa
     name character varying(99) COLLATE pg_catalog."default",
     age integer,
     telephone character varying(99) COLLATE pg_catalog."default",
-    id integer NOT NULL,
+    id character varying(99) NOT NULL,
     CONSTRAINT pessoa_pkey PRIMARY KEY (id)
 )
 WITH (
