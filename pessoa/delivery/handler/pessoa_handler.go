@@ -8,9 +8,8 @@ import (
 	"net/http"
 
 	"github.com/golang-crud/model"
-	"github.com/golang-crud/pessoa/delivery/repository"
 	"github.com/golang-crud/pessoa/delivery/service"
-	"github.com/golang-crud/repo"
+	"github.com/google/uuid"
 )
 
 //NewPessoaHTTPHandler redireciona o request do endpoint /pessoa
@@ -29,10 +28,10 @@ func NewPessoaHTTPHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
+var pessoaService = service.PessoaService{}
+
 // ObterPessoas funcao que obtem pessoas
 func ObterPessoas(w http.ResponseWriter, r *http.Request) {
-
-	pessoaService := service.PessoaService{}
 
 	pessoas, err := pessoaService.ObterPessoas()
 
@@ -64,17 +63,21 @@ func CriarPessoa(w http.ResponseWriter, r *http.Request) {
 	var pessoa model.Pessoa
 
 	err = json.Unmarshal(io, &pessoa)
+	if err != nil {
+		http.Error(w, "Error ao ler json "+err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	id, err := uuid.NewUUID()
 
 	if err != nil {
 		http.Error(w, "Error ao ler json "+err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	pessoaRepository := repository.PessoaRepository{}
+	pessoa.ID = id.String()
 
-	pessoaRepository.Db = repo.Db
-
-	err = pessoaRepository.Incluir(pessoa)
+	err = pessoaService.CriarPessoa(pessoa)
 
 	if err != nil {
 		http.Error(w, "Error ao inserir registro "+err.Error(), http.StatusBadRequest)
@@ -106,9 +109,7 @@ func AlterarPessoa(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	pessoaRepository := repository.PessoaRepository{}
-	pessoaRepository.Db = repo.Db
-	err = pessoaRepository.Alterar(pessoa)
+	err = pessoaService.AlterarPessoa(pessoa)
 
 	if err != nil {
 		http.Error(w, "Erro ao alterar pessoa", http.StatusBadRequest)
@@ -126,10 +127,12 @@ func DeletarPessoa(w http.ResponseWriter, r *http.Request) {
 
 	pessoaID := queryString["id"][0]
 
-	pessoaRepository := repository.PessoaRepository{}
-	pessoaRepository.Db = repo.Db
+	if pessoaID == "" {
+		http.Error(w, "id vazio", http.StatusBadRequest)
+		return
+	}
 
-	err := pessoaRepository.Deletar(pessoaID)
+	err := pessoaService.DeletarPessoa(pessoaID)
 
 	if err != nil {
 		http.Error(w, "Não foi possivel deletar o registro", http.StatusBadRequest)

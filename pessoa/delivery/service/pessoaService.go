@@ -32,3 +32,45 @@ func (service *PessoaService) ObterPessoas() (pessoas []model.Pessoa, err error)
 
 	return pessoas, err
 }
+
+//CriarPessoa cria pessoa na base de dados
+func (service *PessoaService) CriarPessoa(pessoa model.Pessoa) (err error) {
+
+	service = InitRepository(service)
+
+	err = service.Repository.Incluir(pessoa)
+
+	if err != nil {
+		return err
+	}
+
+	return err
+}
+
+//AlterarPessoa altera uma pessoa da base
+func (service *PessoaService) AlterarPessoa(pessoa model.Pessoa) (err error) {
+
+	service = InitRepository(service)
+
+	err = service.Repository.Alterar(pessoa)
+
+	if err != nil {
+		return err
+	}
+
+	return err
+}
+
+//DeletarPessoa deleta uma pessoa da base
+func (service *PessoaService) DeletarPessoa(ID string) (err error) {
+
+	service = InitRepository(service)
+
+	err = service.Repository.Deletar(ID)
+
+	if err != nil {
+		return err
+	}
+
+	return err
+}
