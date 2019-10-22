@@ -13,7 +13,7 @@ func main() {
 	err := repo.AbrirConexao()
 
 	if err != nil {
-		fmt.Println(" [main] [abrir conexao] ", err.Error())
+		fmt.Println("Error [main] [abrir conexao] ", err.Error())
 		return
 	}
 
